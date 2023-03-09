@@ -136,6 +136,9 @@ spec:
             fieldRef:
               fieldPath: spec.nodeName
         securityContext:
+          sysctls:
+          - name: fs.file-max
+            value: 1024
           privileged: true
         volumeMounts:
         - mountPath: /var/run/openvswitch
@@ -195,9 +198,6 @@ spec:
           # will result in a small interruption in traffic until pluto and ovs-monitor-ipsec start again.
           ip x s flush
           ip x p flush
-
-          # Workaround for https://github.com/libreswan/libreswan/issues/373
-          ulimit -n 1024
 
           /usr/libexec/ipsec/addconn --config /etc/ipsec.conf --checkconfig
           # Check kernel modules
